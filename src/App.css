@@ -1,38 +1,336 @@
-.App {
-  text-align: center;
-}
+.black{
+    background-color: black;
+    width: 100%;
+    margin: auto;
+    height:auto !important;
+    color: white;
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+.box{
+    width: 100%;
+    height:fit-content;
+    background-color: whitesmoke;
+}
+.bg-gray{
+    text-align: left;
+    font-size: large;
+    font-weight: 900;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.round{
+    border-radius: 100%;
+    width: 50px;
+    height: 50px;
+}
+body{
+    background-color: black;
+    font-family: 'Times New Roman', Times, serif;
+}
+.in-box{
+    background-color: gray;
+}
+.row-flex {
+    display: flex;
+    flex-wrap: wrap;
   }
+.container{
+    padding: 20px;
+    width: 80%;
+}
+.img-container{
+    margin: auto;
+    padding: 10px;
+    border-bottom: black 10px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.home-link{
+    padding-left: 10px;
+    padding-right: 10px;
+
+}
+.gotolive-btn{
+    background-color: rgb(245, 202, 94);
+    padding: 12px;
+    color: black;
+    width: 270px !important; 
+    font-size: large;
+}
+.footer{
+    justify-content: center;
+    padding: 10px;
+    bottom: auto;
+    font-family: 'Times New Roman', Times, serif;
+    color: white;
+
+}
+.home-nav{
+    color: white;
+    justify-content: center;
+    text-align: center;
+}
+.mx-vh{
+    min-height: 68vh;
+}
+hr{
+    padding: 3px;
+    background-color: darkgoldenrod;
 }
 
-.App-link {
-  color: #61dafb;
+.arrow {
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 5%;   
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.arrow-left {
+    transform: rotate(135deg);
+    -webkit-transform: rotate(135deg);
   }
-  to {
-    transform: rotate(360deg);
+
+.card-card{
+    width: 220rem;
+    padding: 5px;
+    border: 4px solid black;
+    text-align: center;
+    font-weight: 300;
+    font-size: 25px;
   }
+
+  * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+  }
+
+  .modal-wrapper {
+      position: fixed;
+      top:0;
+      bottom: 0;
+      left: 0;
+      right: 0%;
+  } 
+  .modal-backdrop{
+    position: fixed;
+    top:0;
+    bottom: 0;
+    left: 0;
+    right: 0%;
+    z-index: 100;
+    background-color: rgba(0,0,0,0.3);
+  }
+  .text-black{
+      text-align: center;
+      color: black;
+  }
+  .close{
+      background-color: red;
+      padding:5px 5px;
+      cursor: pointer;
+      border-radius: 50%;
+      z-index: 102;
+      color: red;
+      
+  }
+  .img-modal{
+      margin: auto;
+      width: 90%;
+      height: auto;
+  }
+  .profile-img{
+      min-width: 100px;
+      min-height: 100px;
+  }
+  .box-drop{
+      width: 100%;
+      height: 20vh;
+      border: 2px dotted black;
+  }
+
+  .pd-5{
+    padding: 5px;
+  }
+  .img-dash{
+      margin: auto;
+      width: fit-content;
+      height: fit-content;
+  }
+  .const-dash{
+      text-align: center;
+      justify-content: center;
+      border-right: 2px solid black;
+  }
+  .links{
+      background-color: gray;
+  }
+  .pd-10{
+      padding: 0px 0px 5px 5px;
+  }
+  .link{
+      border-top: 2px solid black;
+  }
+  .dash{
+      font-family: 'Times New Roman', Times, serif;
+      color: grey;
+      font-weight: 800;
+      font-size: large;
+      padding: 40px;
+  }
+  .pd-30{
+      padding: 30px;
+  }
+  .dash-container{
+      width: 100%;
+  }
+  .txt-algn-cent{
+      text-align: center;
+      margin: auto;
+  }
+  .modal-box {
+      flex: auto;
+      position: relative;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      height: 80%;
+      max-width: 800px !important;
+      background-color: white;
+      box-shadow: rgba(0,0,0,0.25);
+      z-index: 101;
+      overflow-y:auto  ;
+      padding: 20px;
+  }
+  .social-container{
+      margin:auto;
+      width: 40%;
+      justify-content: center;
+      text-align: center;
+      justify-items: center;
+  }
+  .head{
+      font-family: 'Times New Roman', Times, serif;
+      padding: 20px;
+  }
+  .modal-foot{
+      text-align: center;
+      bottom: 2px;
+      padding: 20px;
+  }
+  .black-fill{
+      background-color: black;
+      width: 90%;
+      margin: auto;
+      text-align: center;
+  }
+  .image-carousel{
+      width: 100%;
+      max-height: 600px !important;
+      margin: auto;
+  }
+  .carousel-container{
+      padding: 50px;
+  }
+  .social{
+      margin: auto;
+      width: 20px;
+      height: 20px;
+      border: 10px transparent;
+  }
+  .spinner{
+      position: relative;
+      top: 50%;
+      left: 50%;
+
+  }
+
+  .navbar-side{
+      background-color :black;
+      height: 80px;
+      display: flex;
+      justify-content: start;
+      align-items: center;
+  }
+
+  .menu-bars {
+      margin-left: 2rem;
+      font-size: 2rem;
+      background: none;
+  }
+  .bd-5{
+      border: solid 5px transparent;
+  }
+  .nav-menu{
+    background-color: lightgray;
+      width: 300px;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      position: fixed;
+      top:0;
+      left: -100%;
+      transition: 850ms;
+      z-index: 100;
+  }
+.nav-menu.active {
+    left: 0;
+    transition: 350ms;
 }
+.nav-text {
+    margin: auto;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    padding: 40px;
+    list-style: none;
+    height: 60px;
+}
+
+ .a{
+    text-decoration: none;
+    color: black;
+    font-size: 18px;
+    width: 95%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding:  0 16px;
+    border-radius: 4px;
+}
+Link{
+    text-decoration: none;
+}
+.a:hover{
+    background-color: lightgray;
+}
+.nav-menu-items{
+    width: 100%;
+}
+.nav-toggle {
+    background-color: black;
+    width: 100%;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+ span{
+     margin-left: 16px;
+ }
+ 
+ .login-btn{
+     width: 80%;
+ }
+.vh{
+    height: 70vh;
+}
+ .login-form{
+     border: 10px solid goldenrod;
+ }
+ .bottom-right {
+    position: absolute;
+    bottom: 12%;
+    right: 2%;
+  }
+  .down-ico{
+      width: 20%;
+      height: 20%;
+  }
