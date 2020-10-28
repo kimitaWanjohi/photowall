@@ -1,7 +1,5 @@
 import React from 'react';
 import { gql, useQuery } from '@apollo/client';
-import { Link } from 'react-router-dom';
-import Modal from './Modal';
 import '../App.css';
 import Spinner from './Spinner';
 import EventItem from './EventObj'

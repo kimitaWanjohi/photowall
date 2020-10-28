@@ -1,7 +1,7 @@
-import React, { Component, useContext } from "react";
+import React, { Component } from "react";
 import Slider from "react-slick";
 import '../App.css'
-import {mediaProvider} from '../index.js'
+
 
 export default class SimpleSlider extends Component {
   render() {

@@ -1,5 +1,5 @@
 import React, {useState, useContext} from 'react';
-import {Link, Redirect} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import Dashboard from './Dashboard';
 import {DashData} from './DashData';
 import {userContext} from '../userContext';
@@ -117,7 +117,8 @@ export const EditProf = ({user, mediaUrl}) => {
                 </div>
 
                 <br/>
-                <form onSubmit={() => {
+                <form onSubmit={(e) => {
+                            e.preventDefault()
                             editProfile({
                                 variables: {
                                     image: image,
@@ -131,6 +132,7 @@ export const EditProf = ({user, mediaUrl}) => {
                     
                                 }
                             })
+                            console.log('done')
                 }}>
                 <div className="pd-5">
                         <label>First name</label>
@@ -192,10 +194,6 @@ export const EditProf = ({user, mediaUrl}) => {
             setEventOpen(false)
         }
         
-        const back =  () => {
-            console.log('name')
-            return <Redirect to='/dash' />
-        }
      return (
         <div className="nav-justified">
         <div className="row row-cols-2">
@@ -251,6 +249,7 @@ mutation UploadImages($eventId: Int! $image: Upload!){
     const [eventCreated, setEventCreated] = useState(false)
     const [key, setKey] = useState(null)
 
+    const [createEvent, {data}] = useMutation(CREATE_EVENT)
     const [UploadImages] = useMutation(UPLOAD_IMAGE)
 
 
@@ -267,7 +266,6 @@ mutation UploadImages($eventId: Int! $image: Upload!){
         });
     }
     const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
-    const [createEvent, {data}] = useMutation(CREATE_EVENT)
 
     return(
         <>
@@ -337,6 +335,7 @@ mutation UploadImages($eventId: Int! $image: Upload!){
                     </> : <p className="text-warning"> Upload Images here!! after creating Event</p>
                 }
             </div>
+            <form><input type="submit" className="btn btn-primary" value="Save"/> </form>
         </div>
         </>
     )

@@ -1,12 +1,12 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext} from 'react';
 import axios from 'axios';
 import { Redirect } from 'react-router-dom';
-import {userContext, getUser} from '../userContext';
+import {userContext} from '../userContext';
 import {Link} from 'react-router-dom';
 import Dashboard from './Dashboard';
 
 function Login (){
-    const {user, setUser}= useContext(userContext)
+    const {user}= useContext(userContext)
     const [username, setUsername ] = useState('')
     const[password, setPassword] = useState('')
     const[login, setLogin] = useState(false)

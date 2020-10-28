@@ -18,6 +18,8 @@ function AuthBtn () {
                         setUser(null);
                     }
                         }><h3 className=" text-white home-link">Log out</h3></Link>
+                        <h3>|</h3>
+                        <Link to="/dash"> <h3 className=" text-white home-link">Dashboard</h3> </Link> 
                 </div>)
                 }
             </div> 

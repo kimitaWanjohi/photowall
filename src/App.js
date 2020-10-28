@@ -9,7 +9,6 @@ import Login from './components/Login';
 import SignUp from './components/Signup';
 import Dash from './components/Dash';
 import {userContext} from './userContext';
-import axios from 'axios';
 import {gql, useQuery} from '@apollo/client';
 
 const GET_USER = gql`
@@ -46,12 +45,11 @@ const GET_USER = gql`
 `
 
 function App({mediaUrl}){
-   const { loading, error, data} = useQuery(GET_USER)
+   const { loading, data} = useQuery(GET_USER)
     const[user, setUser] = useState(null)
     const providerUser = useMemo(() => ({user, setUser}), [user, setUser])
 
     const getUser = async () => {
-      const token = localStorage.getItem('token')
       if (data){
           const token = localStorage.getItem('token')
           if (token===null){

@@ -1,12 +1,10 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import '../App.css';
-import {userContext} from '../userContext';
 import AuthBtn from './AuthBtn';
 
 
 function Home() {
-    const {user, setUser} = useContext(userContext)
     return (
         <div className="container-fluid black-fill text-white home-nav">
             <div>

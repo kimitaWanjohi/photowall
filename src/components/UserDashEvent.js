@@ -1,4 +1,4 @@
-import React, {useState, useCallback} from 'react';
+import React, {useState} from 'react';
 import Modal from './Modal'
 import axios from 'axios';
 import { useDropzone } from 'react-dropzone';
@@ -76,7 +76,7 @@ export default function UserDashEvent ({event, mediaUrl}) {
             `,variables: {
                 id: event.id
             }
-        }).then(res => console.log(res))
+        })
         .catch(err => console.log(err))
         modalRef.current.close()
     }
@@ -153,8 +153,8 @@ export default function UserDashEvent ({event, mediaUrl}) {
                         <h3>Event Images</h3>
                         <div className="row row-flex">
                         {event.eventImages.map(image => (
-                            <div key={image.id} className="col-md-6">
-                                <img className="img-fluid" src={mediaUrl + image.image} />
+                            <div key={image.id} className="col-md-4">
+                                <img className="img-fluid" src={mediaUrl + image.image} alt="..." />
                             </div>
                         ))}
                         </div>

@@ -12,9 +12,9 @@ import {createUploadLink } from 'apollo-upload-client';
 import { setContext } from "@apollo/client/link/context";
 
 
-axios.defaults.baseURL = 'http://localhost:8000';
+axios.defaults.baseURL = 'http://kimita.pythonanywhere.com/';
 
-const httpLink = createUploadLink({ uri: "http://localhost:8000/graphql/"})
+const httpLink = createUploadLink({ uri: "http://kimita.pythonanywhere.com/graphql/"})
 
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem('token');
@@ -31,7 +31,7 @@ const client = new ApolloClient({
   cache : new InMemoryCache(),
 })
 
-const mediaUrl = 'http://localhost:8000/media/'
+const mediaUrl = 'http://kimita.pythonanywhere.com/media/'
 
 export const mediaProvider = React.createContext(null)
 
