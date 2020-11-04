@@ -327,7 +327,7 @@ mutation UploadImages($eventId: Int! $image: Upload!){
                             {
                                 isDragActive ?
                             <><p >click or drop images to upload to the event</p></>:
-                            <><p >click to choose files</p> </>
+                            <><p >click to choose images for the Event</p> </>
                             }
                             </div>
                             </div>
@@ -335,7 +335,6 @@ mutation UploadImages($eventId: Int! $image: Upload!){
                     </> : <p className="text-warning"> Upload Images here!! after creating Event</p>
                 }
             </div>
-            <form><input type="submit" className="btn btn-primary" value="Save"/> </form>
         </div>
         </>
     )
