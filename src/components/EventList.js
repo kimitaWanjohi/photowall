@@ -51,9 +51,13 @@ function EventList({mediaUrl}){
                <h1 style={{textAlign: 'center'}}>LIVE EVENTS</h1>
                 <div className='row row-flex container-fluid'>
                 {
-                       data.allEvents.map(event =>(
-                           <EventItem key={event.id}  event={event} mediaUrl={mediaUrl}/>
-                       ))
+                       data.allEvents.map(event =>{
+                        if(event.status == 'ONLINE'){
+                          return(
+                            <EventItem key={event.id}  event={event} mediaUrl={mediaUrl}/>
+                          )
+                        }
+                       })
                    }
                 </div>
            </div>

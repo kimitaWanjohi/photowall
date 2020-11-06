@@ -248,14 +248,15 @@ mutation UploadImages($eventId: Int! $image: Upload!){
     const [image, setImage] = useState(null)
     const [eventCreated, setEventCreated] = useState(false)
     const [key, setKey] = useState(null)
+    const [complete, setComplete] = useState(0)
+
 
     const [createEvent, {data}] = useMutation(CREATE_EVENT)
     const [UploadImages] = useMutation(UPLOAD_IMAGE)
 
-
     const onDrop = (files) => {
-        console.log(data.createEvent.event)
-        console.log(data.createEvent.event.id)
+        let imageCount = files.length + 1
+        let uploaded = 1
         files.forEach( file => {
             UploadImages({
                 variables: {
@@ -263,9 +264,13 @@ mutation UploadImages($eventId: Int! $image: Upload!){
                     image: file
                 }
             })
+            uploaded += 1
+            setComplete((uploaded/imageCount) * 100)
         });
     }
     const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
+
+    const barData = {bgcolor: "#00695c", completed: complete}
 
     return(
         <>
@@ -327,15 +332,52 @@ mutation UploadImages($eventId: Int! $image: Upload!){
                             {
                                 isDragActive ?
                             <><p >click or drop images to upload to the event</p></>:
-                            <><p >click to choose images for the Event</p> </>
+                            <><p className="btn btn-outline-info">click to choose images for the Event</p> </>
                             }
                             </div>
+                            <div className={"container-fluid"}>
+                                <ProgressBar bgcolor={barData.bgcolor} completed={barData.completed} />
                             </div>
+                        </div>
+                        
                     </div>
                     </> : <p className="text-warning"> Upload Images here!! after creating Event</p>
                 }
             </div>
         </div>
         </>
+    )
+ }
+
+ const ProgressBar = (props)=> {
+    const {bgcolor, completed} = props;
+    const containerStyle = {
+        height:20,
+        width: "100%",
+        backgroundColor: "#e0e0de",
+        borderRadius: 50,
+        margin: 50
+    }
+    const fillerStyles = {
+        height: '100%',
+        width: `${completed}%`,
+        backgroundColor: bgcolor,
+        borderRadius: 'inherit',
+        textAlign: 'right',
+        transition: 'width 1s ease-in-out'
+      }
+    
+      const labelStyles = {
+        padding: 5,
+        color: 'white',
+        fontWeight: 'bold'
+      }
+
+    return (
+        <div style={containerStyle}>  
+            <div style={fillerStyles}>
+                <span style={labelStyles}>{`${completed}%`}</span>
+            </div>
+        </div>
     )
  }

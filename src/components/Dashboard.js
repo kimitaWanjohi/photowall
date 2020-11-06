@@ -10,12 +10,12 @@ function Dashboard(props) {
     const showSidebar = () => setSidebar(!sidebar)
     return (
         <>
-         <div className="navbar-side">
+         <div className="navbar-side bg-dark">
             <Link to="#" className="menu-bars">
                 <FaIcons.FaBars  onClick ={showSidebar} className="text-white"/>
             </Link>
          </div>
-         <nav className={sidebar ? 'nav-menu active' : 'nav-menu'}>
+         <nav className={sidebar ? 'nav-menu active bg-dark' : 'nav-menu'}>
              <ul className='nav-menu-items' onClick={showSidebar}>
                 <li className="navbar-toggle">
                     <Link to="#" className="menu-bars">

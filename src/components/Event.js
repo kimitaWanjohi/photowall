@@ -52,7 +52,7 @@ function Event({ match }){
                     {
                         data.event.eventImages.map(image => (
                             <div key={ image.id } className="col-md-4 pd-10">
-                                <div>
+                                <div className="card bg-dark">
                                 <img src={mediaUrl + image.image} alt="no pic" className="img-fluid" />
                                 <hiIcons.HiOutlineDownload className="bottom-right down-ico" onClick={() => {download(mediaUrl + image.image)}}/>
                                 </div>
