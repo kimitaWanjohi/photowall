@@ -7,14 +7,11 @@ import { CookiesProvider } from 'react-cookie';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
-import axios from 'axios';
 import {createUploadLink } from 'apollo-upload-client';
 import { setContext } from "@apollo/client/link/context";
 
 
-axios.defaults.baseURL = 'https://kimita.pythonanywhere.com/';
-
-const httpLink = createUploadLink({ uri: "https://kimita.pythonanywhere.com/graphql/"})
+const httpLink = createUploadLink({ uri: "http://localhost:8000/graphql/"})
 
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem('token');
@@ -31,16 +28,11 @@ const client = new ApolloClient({
   cache : new InMemoryCache(),
 })
 
-const mediaUrl = 'https://kimita.pythonanywhere.com/media/'
-
-export const mediaProvider = React.createContext(null)
 
 ReactDOM.render(
   <ApolloProvider client={client}>
     <CookiesProvider>
-      <mediaProvider.Provider value={mediaUrl} >
-      <App mediaUrl={mediaUrl}/>
-      </mediaProvider.Provider>
+      <App/>
     </CookiesProvider>
   </ApolloProvider>,
   document.getElementById('root')

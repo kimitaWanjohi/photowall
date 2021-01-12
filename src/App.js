@@ -10,74 +10,42 @@ import SignUp from './components/Signup';
 import Dash from './components/Dash';
 import {userContext} from './userContext';
 import {gql, useQuery} from '@apollo/client';
+import Spinner from './components/Spinner';
 
-const GET_USER = gql`
-  {
-    me{
-      id
-      username
-      email
-      eventSet{
-        id
-        name
-        venue
-        date
-        time
-        status
-        coverImage
-        eventImages{
-          id
-          image
-        }
-      }
-      profile{
-        id
-        image
-        firstName
-        lastName
-        bio
-        facebook
-        instagram
-        twitter
-      }
-    }
-  }
+const Me = gql`
+{me{id username email eventSet{id name venue date time status eventImages{id image}}profile{id image firstName lastName bio facebook instagram twitter}}}
 `
 
-function App({mediaUrl}){
-   const { loading, data} = useQuery(GET_USER)
+
+function App(){
     const[user, setUser] = useState(null)
     const providerUser = useMemo(() => ({user, setUser}), [user, setUser])
+    const {loading, data} = useQuery(Me)
 
-    const getUser = async () => {
-      if (data){
-          const token = localStorage.getItem('token')
-          if (token===null){
-            setUser(null)
-          }else{
-            setUser(data.me)
-          }
-      }else{
-        setUser(null)
+  useEffect( () => {
+      if(data){
+        const token = localStorage.getItem('token')
+        if(token === null){
+          setUser(null)
+        }else{
+          setUser(data.me)
+        }
       }
-    }
-
-    useEffect(() => {
-      getUser()
     })
 
-    if(loading) return <p>loading</p>
+    if(loading) return <div className="black"><Spinner /></div>
+
     return (
       <div className="black" >
         <Router>
           <Switch> 
             <userContext.Provider value={providerUser}>
               <Route path="/" exact component={Home}/>
-              <Route path="/events" exact component={() => <EventList mediaUrl={mediaUrl}/>}/>
-    <Route path="/events/:id" component={Event}  />
+              <Route path="/events" exact component={EventList}/>
+              <Route path="/events/:id" component={Event}  />
               <Route path="/login" exact component={Login } />
               <Route path="/signup" exact component={SignUp} />
-              <Route path="/dash" exact component={()=> <Dash mediaUrl={mediaUrl} />} />
+              <Route path="/dash" exact component={Dash} />
             </userContext.Provider>
           </Switch>
           <div>

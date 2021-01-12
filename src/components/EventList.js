@@ -11,14 +11,9 @@ const GET_EVENTS = gql`
   	id
     name
     venue
-    coverImage
     time
     date
     status
-    eventImages{
-      id
-      image
-    }
     user{
       id
       username
@@ -38,7 +33,7 @@ const GET_EVENTS = gql`
 }`
 
 
-function EventList({mediaUrl}){
+function EventList(){
     const { loading, error, data } = useQuery(GET_EVENTS)
     if(loading) return <div className="spinner"> <Spinner /> </div>
     if (error) return <p className="spinner">whoops... something went wrong</p>
@@ -51,10 +46,10 @@ function EventList({mediaUrl}){
                <h1 style={{textAlign: 'center'}}>LIVE EVENTS</h1>
                 <div className='row row-flex container-fluid'>
                 {
-                       data.allEvents.map(event =>{
-                        if(event.status == 'ONLINE'){
+                       data.allEvents.map(event => {
+                        if(event.status === 'ONLINE'){
                           return(
-                            <EventItem key={event.id}  event={event} mediaUrl={mediaUrl}/>
+                            <EventItem key={event.id}  event={event} />
                           )
                         }
                        })

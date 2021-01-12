@@ -12,18 +12,17 @@ export default class SimpleSlider extends Component {
       slidesToShow: 1,
       slidesToScroll: 1
     };
-    const {mediaUrl} = this.props
     return (
       <div>
         <Slider {...settings}>
           {
-              this.props.images.map(image => (
-                <div key={image.id}>
-                    <img src={mediaUrl + image.image} alt="imgcarl" className=" img-fluid image-carousel" />
+              this.props.images.map((image, index) => (
+                <div key={index}>
+                    <img src={image} alt="imgcarl" className=" img-fluid image-carousel" />
                 </div>
               ))
           }
-        </Slider>
+        </Slider>,
       </div>
     );
   }

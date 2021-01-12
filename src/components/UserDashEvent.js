@@ -2,19 +2,26 @@ import React, {useState} from 'react';
 import Modal from './Modal'
 import axios from 'axios';
 import { useDropzone } from 'react-dropzone';
-import {gql, useMutation } from '@apollo/client';
+import {gql, useMutation, useQuery } from '@apollo/client';
+import Spinner from './Spinner';
 
 
 const EVENT_UPDATE = gql`
-mutation($id: Int! $name: String! $venue: String! $time: String! $date: String! $image: Upload!){
-    updateEvent(id: $id date: $date time: $time name: $name venue: $venue image: $image){
+mutation($id: Int! $name: String! $venue: String! $time: String! $date: String!){
+    updateEvent(id: $id date: $date time: $time name: $name venue: $venue){
       event{
         id
       }
     }
   }
 `
-export default function UserDashEvent ({event, mediaUrl}) {
+const EVENT_IMAGES = gql`
+query EventImages($event_id: Int!){
+    allImages(eventId: $event_id)
+  }
+`
+
+export default function UserDashEvent ({event}) {
     const modalRef = React.useRef();
     const openModal = () => {
         modalRef.current.openModal()
@@ -28,6 +35,7 @@ export default function UserDashEvent ({event, mediaUrl}) {
     const [date, setDate] = useState(event.date)
 
     const [updateEvent] = useMutation(EVENT_UPDATE)
+    const {loading, error, data} = useQuery(EVENT_IMAGES, {variables: {event_id: event.id}})
     
     const onDrop = ([file]) => {
         updateEvent({variables: {
@@ -36,7 +44,6 @@ export default function UserDashEvent ({event, mediaUrl}) {
             venue: venue,
             time: time,
             date: date,
-            image: file
         }})
     }
 
@@ -80,13 +87,16 @@ export default function UserDashEvent ({event, mediaUrl}) {
         .catch(err => console.log(err))
         modalRef.current.close()
     }
+
+    if(loading) return <Spinner />
+    if(error) return <p>something went wrong :'(</p>
    
     return (   
     <>
      <div key={event.id}  className="col-md-4 pd-5" >
          <div className="card mx-vh">
          <div className="card-body">
-         <img src={mediaUrl + event.coverImage} height="40%" alt="..." className="img-fluid" />
+         <img src={data.allImages[0]} height="40%" alt="..." className="img-fluid" />
         <h4>{event.name}</h4>
         <p>Venue: {event.venue} </p>
         <p>Time: {event.time} </p>
@@ -98,7 +108,7 @@ export default function UserDashEvent ({event, mediaUrl}) {
             <div className="container-fluid">
                 <h2>Edit Event</h2>
                 <div className="row row-flex card">
-                    <img className="img-fluid" src={mediaUrl + event.coverImage} alt="..." />
+                    <img className="img-fluid" src={data.allImages[0]} alt="..." />
                 </div>
                 <div className=' container-fluid'>
                     <h4> {event.name} </h4>
@@ -119,18 +129,6 @@ export default function UserDashEvent ({event, mediaUrl}) {
                             <label>Event Date</label>
                             <input type='date' value={date} className="form-control" onChange={e=> setDate(e.target.value)} />
                         </div>
-                        <div className="pd-10">
-                            <label>Choose Image</label>
-                            <div {...getRootProps()}>
-                            <input {...getInputProps()} />
-                            {
-                                isDragActive ?
-                                <p className="btn btn-outline-info">Select Image</p> :
-                                <p className="btn btn-outline-info">Select Image</p>
-                            }
-                            </div>
-                        </div>
-
 
                         <div className="pd-10y">
                             <input type='submit' value='save Changes' className="btn btn-outline-info" onClick={closeModal} />
@@ -149,20 +147,18 @@ export default function UserDashEvent ({event, mediaUrl}) {
                     </div>) : <div></div>
                     }
                     <br />
-                    <div className="container-fluid">
+                </div>
+            </div>
+            <div className="container-fluid">
                         <h3>Event Images</h3>
                         <div className="row row-flex">
-                        {event.eventImages.map(image => (
-                            <div key={image.id} className="col-md-4">
-                                <img className="img-fluid" src={mediaUrl + image.image} alt="..." />
+                        {data.allImages.map((image, index) => (
+                            <div key={index} className="col-md-4 card card-body">
+                                <img className="img-fluid" src={image} alt="..." />
                             </div>
                         ))}
                         </div>
                     </div>
-
-                
-                </div>
-            </div>
         </Modal>
          </div>
 

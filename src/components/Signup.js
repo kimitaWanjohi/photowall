@@ -1,9 +1,28 @@
 import React, {useState, useContext} from 'react';
 import {Link, Redirect} from 'react-router-dom';
 import {userContext} from '../userContext';
-import axios from 'axios';
 import Dashboard from './Dashboard';
+import {gql, useMutation} from '@apollo/client';
 
+const SIGNUP  = gql`
+mutation SIGNUP(
+    $email: String!
+    $password: String!
+    $password1: String!
+    $username: String!
+  ) {
+    signUp(
+      email: $email
+      password: $password
+      password1: $password1
+      username: $username
+    ) {
+      user {
+        id
+      }
+    }
+  }
+`
 
 
 function SignUp(){
@@ -15,39 +34,27 @@ function SignUp(){
     const [err, setErr] = useState(null)
     const [signup, setSignup] = useState(false)
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if (password1 !== password){
-            setErr('password did not match')
-        }
-        axios.post('/graphql/', {
-            query: `
-            mutation($username: String! $email: String! $password: String! $password1: String!){
-                signUp(username: $username email: $email password:$password password1: $password1){
-                  user{
-                    username
-                  }
-                }
-              }
-            `,
-            variables: {
-                username: username,
+    const [signUpMut, {onError, onCompleted}] = useMutation(SIGNUP)
+
+   const handleSubmit =  async (e) => {
+       e.preventDefault()
+       if(password1 !== password){
+           setErr('passwords did not match')
+       }else{
+        try{
+            await signUpMut({variables: {
                 email: email,
                 password: password,
-                password1: password1
+                password1: password1,
+                username: username
             }
-        }).then(res => {
-            if(res.data.errors){
-                res.data.errors.forEach( err => {
-                    err.message.includes('auth_user.username') ? setErr('username already taken') : setErr(err.message)
-                })
-            }else{
-                setSignup(true)
-            }
-        }).catch(err => {
-            console.log(err)
-        })
-    }
+         })
+         setSignup(true)
+        }catch (error){
+            setErr('username already taken!')
+        }
+   }
+}
 
     const dashData = [
         {
@@ -113,7 +120,7 @@ function SignUp(){
                         <label className="text-black float-left"><h5>Confirm Password:</h5></label>
                         <input type="password" className="form-control" value={password1}  onChange={e =>setPassword1(e.target.value)} />
                     </div>
-            <small className="text-danger"> {err}</small>
+            { err? <small className="text-danger"> {err}</small> : <p></p> }
                     <div className="pd-5">
                          <input type = "submit" value="Sign Up" className="btn btn-info login-btn rounded-pill" />
                     </div>   

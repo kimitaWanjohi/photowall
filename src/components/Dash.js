@@ -1,21 +1,18 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext } from 'react';
 import {Link} from 'react-router-dom';
 import Dashboard from './Dashboard';
 import {DashData} from './DashData';
 import {userContext} from '../userContext';
 import {useDropzone} from 'react-dropzone';
-import {gql, useMutation } from '@apollo/client';
+import {gql, useMutation, useQuery } from '@apollo/client';
 import UserDashEvent from './UserDashEvent';
 import Modal from 'react-modal';
-import {useQuery} from '@apollo/client';
-import {v4 as uuidv4} from 'uuid';
+import Spinner from './Spinner';
 
-const Me= gql`
-{
-    me{
-        username
-    }
-}
+const UserImage = gql`
+query UserImage($user_id: Int!){
+    userImage(userId: $user_id)
+  }
 `
 
 
@@ -23,33 +20,11 @@ Modal.setAppElement('#root')
 
 function Dash({mediaUrl}) {
     const {user} = useContext(userContext)
-
-    const { loading } = useQuery(Me)
-    if (loading) return <p>loading</p>
-
+    
     return (
         <> 
-        {user === null ? <p>...</p> : (
+        {user === null ? <p>Login required</p> : (
             <>
-                         <Dashboard>
-                         <>
-                         <div>
-                             <h1 className="pd-10">DON ARTS</h1>
-                             <div className="img-dash rounded-circle pd-10">
-                                 <img className="img-fluid round img profile-img" src={mediaUrl + user.profile.image} width="40px"  height="40px" alt="..." />
-                             </div>
-                             <h5 style={{margin: 'auto', textAlign: 'center'}}> Hi {user.profile.firstName ? user.profile.firstName : user.username}</h5>
-                         </div>
-                      
-                         {
-                              DashData.map((link, index) => (
-                                  <div key={index}>
-                                     <Link to={link.path} ><h4 className={' nav-text pd-10 a'} > {link.title}</h4></Link>
-                                  </div>
-                              ))
-                          }
-                          </>
-                      </Dashboard>
                       <div className="container bg-light text-black">
                           <div>
                               <h2>Dashboard</h2>
@@ -79,20 +54,46 @@ function Dash({mediaUrl}) {
  export default Dash
 
 const EDIT_PROFILE = gql`
-mutation UPdateProfile($bio: String! $facebook: String! $firstName: String! $image: Upload! $instagram: String! $lastName: String! $twitter: String! $userId: Int!){
-    updateProfile(bio: $bio, facebook: $facebook, firstName: $firstName, image: $image, instagram: $instagram, lastName: $lastName, twitter: $twitter, userId: $userId){
-      profile{
+mutation UPdateProfile(
+    $bio: String!
+    $facebook: String!
+    $firstName: String!
+    $instagram: String!
+    $lastName: String!
+    $twitter: String!
+    $userId: Int!
+  ) {
+    updateProfile(
+      bio: $bio
+      facebook: $facebook
+      firstName: $firstName
+      instagram: $instagram
+      lastName: $lastName
+      twitter: $twitter
+      userId: $userId
+    ) {
+      profile {
         firstName
-        image
-        user{
+        user {
           id
         }
       }
     }
   }
+  
 `
+const ChangeUserImage = gql`
+mutation ChageUserImage($user_id: Int!, $image: Upload!) {
+    changeUserImage(image: $image, userId: $user_id) {
+      profile {
+        image
+      }
+    }
+  }
+` 
 
-export const EditProf = ({user, mediaUrl}) => {
+
+export const EditProf = ({user}) => {
     const { profile } = user
     const [firstname, setFirstname] = useState(profile.firstName)
     const [lastname, setLastname] = useState(profile.lastName)
@@ -103,25 +104,45 @@ export const EditProf = ({user, mediaUrl}) => {
     const [image, setImage] = useState(null)
 
     const [editProfile] = useMutation(EDIT_PROFILE)
+    const [changeUserImage] = useMutation(ChangeUserImage)
+    const {loading: userImageLoading, data: userImageData, error: userImageErr} = useQuery(UserImage, {
+        variables: {
+            user_id: user.id
+        }
+    })
 
-
+    if(userImageLoading) return <p>wait a moment</p>
+    if(userImageErr) return <p>whoops something went wrong :,( </p>
      return(
          <>
             <div className="container-fluid" >
             <form className="float-right"><input type="submit" className="text-danger float-right" value="X"/></form>
                 <div>
-                    <div className="img-dash rounded-circle pd-10">
-                            <img className="img-fluid round img profile-img" src={mediaUrl + user.profile.image} width="40px"  height="40px" alt="..." />
+                    <div className="img-dash rounded-circle pd-5">
+                            <img className="img-fluid round img profile-img" src={userImageData.userImage} width="40px"  height="40px" alt="..." />
+                        </div>
+                        <div>
+                        <div  className="container-fluid bg-gray " style={{margin: 'auto', justifyContent: 'center' }}>
+                            <label>change profile Image</label>
+                            <div style={{margin: 'auto'}} className="pd-5">
+                            <input type="file" className="form-control-file" onChange={e => {setImage(e.target.files[0])}} /> <br/>
+                               {image? <button className="btn btn-primary" onClick={()=>{
+                                    changeUserImage({variables: {
+                                        user_id: user.id,
+                                        image: image
+                                    }})
+                                    setImage(null)
+                                }}>save Image</button> : <p></p>}
+                            </div>
+                        </div>
                         </div>
                         <h3 style={{textAlign: 'center'}}>{user.username} Profile</h3> 
                 </div>
 
                 <br/>
                 <form onSubmit={(e) => {
-                            e.preventDefault()
                             editProfile({
                                 variables: {
-                                    image: image,
                                     firstName: firstname,
                                     lastName: lastname,
                                     bio: bio,
@@ -158,11 +179,6 @@ export const EditProf = ({user, mediaUrl}) => {
                         <label>Twitter Link</label>
                         <input type='text' className="form-control" placeholder="eg... http://www.twitter.com/username/" onChange={e=>setTwitter(e.target.value)} value={twitter} />
                     </div>
-
-                    <div className="pd-10">
-                            <label>Profile Image</label>
-                                <input type="file" className="form-control-file" onChange={e => {setImage(e.target.files[0])}} />
-                        </div>
                             
                     <div className="pd-5">
                         <input type='submit' className="btn btn-outline-info" value="Save Profile" />
@@ -175,6 +191,9 @@ export const EditProf = ({user, mediaUrl}) => {
 
  const Nav = ({mediaUrl,  user}) => {
      
+    const {loading, data, error} = useQuery(UserImage, {variables: {user_id: user.id}})
+
+
         //profileModal functions
 
         const [profileOpen, setProfileOpen] = useState(false)
@@ -193,8 +212,30 @@ export const EditProf = ({user, mediaUrl}) => {
         const closeEvent = () => {
             setEventOpen(false)
         }
+        if(loading) return <Spinner /> 
+        if(error) return <p>something is wrong!!</p>
         
      return (
+         <>
+        <Dashboard>
+        <>
+        <div>
+            <h1 className="pd-10">DON ARTS</h1>
+            <div className="img-dash rounded-circle pd-10">
+                <img className="img-fluid round img profile-img" src={data.userImage} width="40px"  height="40px" alt="..." />
+            </div>
+            <h5 style={{margin: 'auto', textAlign: 'center'}}> Hi {user.profile.firstName ? user.profile.firstName : user.username}</h5>
+        </div>
+     
+        {
+             DashData.map((link, index) => (
+                 <div key={index}>
+                    <Link to={link.path} ><h4 className={' nav-text pd-10 a'} > {link.title}</h4></Link>
+                 </div>
+             ))
+         }
+         </>
+     </Dashboard>
         <div className="nav-justified">
         <div className="row row-cols-2">
         <div  className="text-black a nav-menu-items" onClick={openEvent}>
@@ -215,15 +256,28 @@ export const EditProf = ({user, mediaUrl}) => {
             </div>
         </div>
     </div>
+    </>
      )
  }
 
 const CREATE_EVENT = gql`
-mutation($eventKey: String! $name: String! $date:String! $userId: Int $venue: String! $image: Upload! $time: String!){
-    createEvent(coverImage: $image, date: $date, eventKey: $eventKey, name: $name, time: $time, userId: $userId, venue: $venue){
-      event{
-          id
-          name
+mutation(
+    $name: String!
+    $date: String!
+    $userId: Int
+    $venue: String!
+    $time: String!
+  ) {
+    createEvent(
+      date: $date
+      name: $name
+      time: $time
+      userId: $userId
+      venue: $venue
+    ) {
+      event {
+        id
+        name
       }
     }
   }
@@ -245,17 +299,16 @@ mutation UploadImages($eventId: Int! $image: Upload!){
     const [eventVenue, setEventVenue] = useState(null)
     const [date, setDate] = useState(null)
     const [time, setTime] = useState(null)
-    const [image, setImage] = useState(null)
     const [eventCreated, setEventCreated] = useState(false)
-    const [key, setKey] = useState(null)
     const [complete, setComplete] = useState(0)
-
+    const [transition, setTransition] = useState(1)
 
     const [createEvent, {data}] = useMutation(CREATE_EVENT)
     const [UploadImages] = useMutation(UPLOAD_IMAGE)
 
     const onDrop = (files) => {
         let imageCount = files.length + 1
+        setTransition(imageCount)
         let uploaded = 1
         files.forEach( file => {
             UploadImages({
@@ -270,7 +323,7 @@ mutation UploadImages($eventId: Int! $image: Upload!){
     }
     const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
 
-    const barData = {bgcolor: "#00695c", completed: complete}
+    const barData = {bgcolor: "#00695c", completed: complete, transition: transition}
 
     return(
         <>
@@ -283,13 +336,11 @@ mutation UploadImages($eventId: Int! $image: Upload!){
                     e.preventDefault()
                     createEvent({
                         variables: {
-                            image: image,
                             name: eventName,
                             venue: eventVenue,
                             date: date,
                             time: time,
-                            userId: user.id,
-                            eventKey: key,
+                            userId: user.id
                         }
                     });
                     setEventCreated(true)
@@ -298,8 +349,6 @@ mutation UploadImages($eventId: Int! $image: Upload!){
                         <label>Event Name</label>
                         <input type="text" onChange={e=>{
                             setEventName(e.target.value); 
-                            const keyItem = `${uuidv4()}`
-                            setKey(keyItem);
                             }} className="form-control"/>
                     </div>
                     <div className="pd-5">
@@ -313,10 +362,6 @@ mutation UploadImages($eventId: Int! $image: Upload!){
                     <div className="pd-5">
                         <label>Event Time</label>
                         <input type="time" onChange={e=>{setTime(e.target.value)}} className="form-control"/>
-                    </div>
-                    <div className="pd-5">
-                        <label>Event Cover Image</label> <br/>
-                        <input type="file" onChange={(e) => setImage(e.target.files[0])} />
                     </div>
                     <div className="pd-5">
                         <input type="submit" value="Create Event" className="btn btn-outline-info"/>
@@ -336,7 +381,7 @@ mutation UploadImages($eventId: Int! $image: Upload!){
                             }
                             </div>
                             <div className={"container-fluid"}>
-                                <ProgressBar bgcolor={barData.bgcolor} completed={barData.completed} />
+                                <ProgressBar bgcolor={barData.bgcolor} completed={barData.completed} transition={barData.transition} />
                             </div>
                         </div>
                         
@@ -350,7 +395,7 @@ mutation UploadImages($eventId: Int! $image: Upload!){
  }
 
  const ProgressBar = (props)=> {
-    const {bgcolor, completed} = props;
+    const {bgcolor, completed, transition} = props;
     const containerStyle = {
         height:20,
         width: "100%",
@@ -364,7 +409,7 @@ mutation UploadImages($eventId: Int! $image: Upload!){
         backgroundColor: bgcolor,
         borderRadius: 'inherit',
         textAlign: 'right',
-        transition: 'width 1s ease-in-out'
+        transition: `width ${transition}s ease-in-out`
       }
     
       const labelStyles = {
