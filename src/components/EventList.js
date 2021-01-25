@@ -36,8 +36,6 @@ const GET_EVENTS = gql`
 function EventList(){
     const { loading, error, data } = useQuery(GET_EVENTS)
     if(loading) return <div className="spinner"> <Spinner /> </div>
-    if (error) return <p className="spinner">whoops... something went wrong</p>
-
   
     return (
         <div className="black-fill">
@@ -45,7 +43,7 @@ function EventList(){
            <div style={{border: "10px", paddingTop: "30px"}}>
                <h1 style={{textAlign: 'center'}}>LIVE EVENTS</h1>
                 <div className='row row-flex container-fluid'>
-                {
+                {error? <p className="spinner">whoops... something went wrong</p>:
                        data.allEvents.map(event => {
                         if(event.status === 'ONLINE'){
                           return(

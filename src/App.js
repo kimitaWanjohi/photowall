@@ -13,8 +13,7 @@ import {gql, useQuery} from '@apollo/client';
 import Spinner from './components/Spinner';
 
 const Me = gql`
-{me{id username email eventSet{id name venue date time status eventImages{id image}}profile{id image firstName lastName bio facebook instagram twitter}}}
-`
+{me{id username email eventSet{id name venue date time status}profile{id firstName lastName bio facebook instagram twitter}}}`
 
 
 function App(){

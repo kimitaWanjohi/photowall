@@ -35,7 +35,6 @@ function Event({ match }){
         }
     })
     if (loading) return <div className="spinner"><Spinner /></div>
-    if (error) return <p className="spinnerw">whoopss.. something is wrong</p>
 
     return (
         <div className="black-fill">
@@ -46,7 +45,7 @@ function Event({ match }){
            <div className="container-fluid" >
                 <h2 className={'text-white head '}> {data.event.name}</h2>
                 <div className="row row-flex">
-                    {
+                    {error? <p className="spinnerw">whoopss.. something is wrong</p> :
                         data.allImages.map((image, index) => (
                             <div key={ index } className="col-md-4 pd-10">
                                 <div className="card bg-dark">

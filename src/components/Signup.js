@@ -52,6 +52,7 @@ function SignUp(){
          setSignup(true)
         }catch (error){
             setErr('username already taken!')
+            console.log(error)
         }
    }
 }

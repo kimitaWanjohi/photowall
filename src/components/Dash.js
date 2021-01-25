@@ -14,16 +14,26 @@ query UserImage($user_id: Int!){
     userImage(userId: $user_id)
   }
 `
+const Me = gql`
+{
+    me{
+        id
+    }
+}
+`
 
 
 Modal.setAppElement('#root')
 
 function Dash({mediaUrl}) {
     const {user} = useContext(userContext)
+    const {loading, error, data} = useQuery(Me)
+
+    if(loading)return <Spinner />
     
     return (
         <> 
-        {user === null ? <p>Login required</p> : (
+        {user === null ? <p>try reloading</p> : (
             <>
                       <div className="container bg-light text-black">
                           <div>
@@ -38,7 +48,7 @@ function Dash({mediaUrl}) {
                                     <div className ="row row-flex">
                                         {
                                             user.eventSet.map((event) => (
-                                                <UserDashEvent mediaUrl={mediaUrl} event={event} key={event.id} />
+                                                <UserDashEvent  event={event} key={event.id} />
                                             ))
                                         }
                                     </div>
@@ -141,6 +151,7 @@ export const EditProf = ({user}) => {
 
                 <br/>
                 <form onSubmit={(e) => {
+                            e.preventDefault()
                             editProfile({
                                 variables: {
                                     firstName: firstname,
@@ -421,7 +432,7 @@ mutation UploadImages($eventId: Int! $image: Upload!){
     return (
         <div style={containerStyle}>  
             <div style={fillerStyles}>
-                <span style={labelStyles}>{`${completed}%`}</span>
+                <span style={labelStyles}>{":-)"}</span>
             </div>
         </div>
     )

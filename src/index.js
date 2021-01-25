@@ -11,7 +11,7 @@ import {createUploadLink } from 'apollo-upload-client';
 import { setContext } from "@apollo/client/link/context";
 
 
-const httpLink = createUploadLink({ uri: "http://localhost:8000/graphql/"})
+const httpLink = createUploadLink({ uri: "https://kimita.pythonanywhere.com/graphql/"})
 
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem('token');

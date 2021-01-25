@@ -51,7 +51,7 @@ export default function UserDashEvent ({event}) {
 
     const delEvent = e => {
         e.preventDefault();
-        axios.post('/graphql/', {
+        axios.post('https://kimita.pythonanywhere.com/graphql/', {
             query: `
             mutation($id: Int!){
                 delEvent(id: $id){
@@ -71,7 +71,7 @@ export default function UserDashEvent ({event}) {
 
     const endEvent = e => {
         e.preventDefault();
-        axios.post('/graphql/', {
+        axios.post('https://kimita.pythonanywhere.com/graphql/', {
             query: `
             mutation($id: Int!){
                 endEvent(id: $id){
