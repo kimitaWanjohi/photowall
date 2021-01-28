@@ -226,6 +226,7 @@ hr{
       width: 100%;
       max-height: 600px !important;
       margin: auto;
+      min-height: fit-content !important;
   }
   .carousel-container{
       padding: 50px;

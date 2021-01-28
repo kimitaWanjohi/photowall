@@ -1,7 +1,7 @@
 import React from 'react';
 import {useQuery, gql} from '@apollo/client';
 import Spinner from './Spinner';
-import SimpleSlider from './Carousel';
+import CarouselComp from './Carousel';
 import Nav from './Nav';
 import * as hiIcons from 'react-icons/hi';
 import axios from 'axios'
@@ -39,8 +39,8 @@ function Event({ match }){
     return (
         <div className="black-fill">
             <Nav />
-           <div className="carousel-container rounded" style={{backgroundColor: "#343A40"}}>
-            <SimpleSlider  images={data.allImages}/>
+           <div className="carousel-container rounded" style={{backgroundColor: "black"}}>
+            <CarouselComp images={data.allImages}/>
            </div>
            <div className="container-fluid" >
                 <h2 className={'text-white head '}> {data.event.name}</h2>
