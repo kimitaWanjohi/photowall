@@ -16,17 +16,18 @@ query Event($event_id: Int!){
   }
 `
 const download = (url)=>{
-    axios.get(url, {
-        responseType: 'blob'
-    })
-    .then((res) => {
-        const uri = window.URL.createObjectURL(new Blob([res.data]));
-        const link = document.createElement('a');
-        link.href = uri;
-        link.setAttribute('download', 'img.jpg'); //or any other extension
-        document.body.appendChild(link);
-        link.click();
-    })
+    window.open(url)
+    // axios.get(url, {
+    //     responseType: 'blob'
+    // })
+    // .then((res) => {
+    //     const uri = window.URL.createObjectURL(new Blob([res.data]));
+    //     const link = document.createElement('a');
+    //     link.href = uri;
+    //     link.setAttribute('download', 'img.jpg'); //or any other extension
+    //     document.body.appendChild(link);
+    //     link.click();
+    // })
 }
 function Event({ match }){
     const { loading, error, data } = useQuery(EVENT, {
