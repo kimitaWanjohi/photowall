@@ -5,6 +5,7 @@ import CarouselComp from './Carousel';
 import Nav from './Nav';
 import * as hiIcons from 'react-icons/hi';
 import axios from 'axios'
+import AWS from 'aws-sdk'
 
 
 const EVENT = gql`
@@ -16,19 +17,19 @@ query Event($event_id: Int!){
   }
 `
 const download = (url)=>{
-    window.open(url)
-    // axios.get(url, {
-    //     responseType: 'blob'
-    // })
-    // .then((res) => {
-    //     const uri = window.URL.createObjectURL(new Blob([res.data]));
-    //     const link = document.createElement('a');
-    //     link.href = uri;
-    //     link.setAttribute('download', 'img.jpg'); //or any other extension
-    //     document.body.appendChild(link);
-    //     link.click();
-    // })
+  axios.get(url, {
+      responseType: 'blob'
+  })
+  .then((res) => {
+      const uri = window.URL.createObjectURL(new Blob([res.data]));
+      const link = document.createElement('a');
+      link.href = uri;
+      link.setAttribute('download', 'img.jpg'); 
+      document.body.appendChild(link);
+      link.click();
+  })
 }
+
 function Event({ match }){
     const { loading, error, data } = useQuery(EVENT, {
         variables: {
