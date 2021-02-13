@@ -10,7 +10,7 @@ function Footer(){
             <h3 className='home-link'>ABOUT</h3> <h3>|</h3>
             <h3 className='home-link'>PRIVACY POLICY</h3>
             </div>
-        <p style={{textAlign:"center"}} className='home'>©copyrite 2020 donphotography. Powered by kurzSystems.</p>
+        <p style={{textAlign:"center"}} className='home'>©copyright 2020 donphotography. Powered by kurzSystems.</p>
         </div>
     )
 }
