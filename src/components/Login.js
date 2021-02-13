@@ -91,7 +91,7 @@ function Login (){
                      <form onSubmit={handleSubmit} className="pd-30">
                          <div className="pd-10">
                              <label className="text-black float-left"><h5>Username:</h5></label>
-                             <input type="text" className="form-control" value={username} onChange={e=>setUsername(e.target.value)} />
+                             <input type="text" className="form-control" value={username} onChange={e=>setUsername(e.target.value.toLowerCase())} />
                          </div>
                          <div className="pd-10">
                             <label className="text-black float-left"><h5>Password:</h5></label>

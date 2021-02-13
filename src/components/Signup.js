@@ -107,7 +107,7 @@ function SignUp(){
                  <form onSubmit={handleSubmit} className="pd-5">
                  <div className="pd-5">
                          <label className="text-black float-left"><h5>Username:</h5></label>
-                         <input type="text" className="form-control" value={username} onChange={e=>setUsername(e.target.value)} />
+                         <input type="text" className="form-control" value={username} onChange={e=>setUsername(e.target.value.toLowerCase())} />
                      </div>
                      <div className="pd-5">
                          <label className="text-black float-left"><h5>Email:</h5></label>
